@@ -2,32 +2,29 @@ package main
 
 import (
 	"regexp"
-	"strings"
 
 	. "utils"
 )
 
-func puzzle1(file string) int {
-	strings := strings.Split(file, "\n")
+func puzzle1(input []string) int {
 	re := regexp.MustCompile("[0-9]")
 
 	result := 0
-	for _, str := range strings {
-		matches := re.FindAllString(str, -1)
-		result += ConvertToInt(matches[0] + matches[len(matches)-1])
+	for _, line := range input {
+		matches := re.FindAllString(line, -1)
+		result += ToInt(matches[0] + matches[len(matches)-1])
 	}
 	return result
 }
 
-func puzzle2(file string) int {
-	strings := strings.Split(file, "\n")
+func puzzle2(input []string) int {
 	re := regexp.MustCompile("one|two|three|four|five|six|seven|eight|nine|[0-9]")
 	reverseRe := regexp.MustCompile("eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|[0-9]")
 
 	result := 0
-	for _, str := range strings {
-		first := re.FindString(str)
-		last := reverseString(reverseRe.FindString(reverseString(str)))
+	for _, line := range input {
+		first := re.FindString(line)
+		last := reverse(reverseRe.FindString(reverse(line)))
 		strMap := map[string]string{
 			"1":     "1",
 			"2":     "2",
@@ -48,17 +45,14 @@ func puzzle2(file string) int {
 			"eight": "8",
 			"nine":  "9",
 		}
-		result += ConvertToInt(strMap[first] + strMap[last])
+		result += ToInt(strMap[first] + strMap[last])
 	}
 	return result
 }
 
-func reverseString(input string) string {
-	runes := []rune(input)
-
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
+func reverse(s string) (result string) {
+	for _, v := range s {
+		result = string(v) + result
 	}
-
-	return string(runes)
+	return
 }
